@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premium Digital Business Card</title>
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-color: #6C63FF;
+            --secondary-color: #2A2A2A;
+            --bg-color: #f0f2f5;
+            --card-bg: #ffffff;
+            --text-main: #333333;
+            --text-light: #666666;
+            --shadow: 0 10px 30px rgba(0,0,0,0.1);
+            --gradient: linear-gradient(135deg, #6C63FF 0%, #a18dce 100%);
+            --whatsapp: #25D366;
+            --phone: #007bff;
+            --email: #ea4335;
+            --location: #ff9800;
+        }
+
+        [data-theme="dark"] {
+            --primary-color: #8c85ff;
+            --bg-color: #121212;
+            --card-bg: #1e1e1e;
+            --text-main: #ffffff;
+            --text-light: #aaaaaa;
+            --shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding: 20px 0;
+            transition: background 0.3s ease;
+        }
+
+        /* Mobile Container Simulation */
+        .card-container {
+            width: 100%;
+            max-width: 420px;
+            background-color: var(--card-bg);
+            border-radius: 30px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            position: relative;
+            margin: 0 10px;
+            transition: background 0.3s ease;
+            padding-bottom: 0px; /* Space for sticky footer if needed */
+        }
+
+        /* Header / Banner */
+        .banner {
+            height: 160px;
+            width: 100%;
+            background: url('https://images.unsplash.com/photo-1557683316-973673baf926?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80');
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        .banner::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, transparent, rgba(0,0,0,0.3));
+        }
+
+        /* Theme Toggle */
+        .theme-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(10px);
+            padding: 10px;
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 10;
+            color: white;
+            border: 1px solid rgba(255,255,255,0.3);
+            transition: transform 0.3s;
+        }
+        .theme-toggle:hover {
+            transform: scale(1.1);
+        }
+
+        /* Profile Section */
+        .profile-section {
+            text-align: center;
+            margin-top: -75px;
+            padding: 0 20px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .profile-img-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        .profile-img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 5px solid var(--card-bg);
+            object-fit: cover;
+            background: #fff;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            transition: border-color 0.3s ease;
+        }
+
+        .verified-badge {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background: #1DA1F2;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 3px solid var(--card-bg);
+            font-size: 14px;
+        }
+
+        .name {
+            font-size: 26px;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-top: 10px;
+        }
+
+        .designation {
+            font-size: 14px;
+            color: var(--primary-color);
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+        }
+
+        .company {
+            font-size: 14px;
+            color: var(--text-light);
+            margin-bottom: 20px;
+        }
+
+        /* Quick Actions Grid */
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            padding: 20px;
+            margin-top: 10px;
+        }
+
+        .action-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+
+        .action-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .action-item:active .action-btn {
+            transform: scale(0.9);
+        }
+
+        .action-label {
+            font-size: 12px;
+            color: var(--text-light);
+            font-weight: 500;
+        }
+
+        /* Save Contact Button */
+        .save-contact-btn {
+            background: var(--gradient);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: 600;
+            width: 85%;
+            margin: 10px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            cursor: pointer;
+            box-shadow: 0 5px 20px rgba(108, 99, 255, 0.4);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(108, 99, 255, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(108, 99, 255, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(108, 99, 255, 0); }
+        }
+
+        /* Content Sections */
+        .section {
+            padding: 25px 20px;
+            border-top: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .section-title {
+            font-size: 18px;
+            color: var(--text-main);
+            margin-bottom: 15px;
+            position: relative;
+            padding-left: 15px;
+        }
+
+        .section-title::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            height: 20px;
+            width: 4px;
+            background: var(--primary-color);
+            border-radius: 2px;
+        }
+
+        /* About Text */
+        .about-text {
+            color: var(--text-light);
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        /* Social Links */
+        .social-grid {
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+        }
+
+        .social-link {
+            width: 45px;
+            height: 45px;
+            border-radius: 12px;
+            background: var(--bg-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            color: var(--text-main);
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+
+        .social-link:hover {
+            background: var(--primary-color);
+            color: white;
+            transform: translateY(-3px);
+        }
+
+        /* Services Cards */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .service-card {
+            background: var(--bg-color);
+            padding: 15px;
+            border-radius: 15px;
+            text-align: center;
+            transition: transform 0.2s;
+        }
+        .service-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .service-icon {
+            font-size: 24px;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+        .service-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-main);
+            margin-bottom: 5px;
+        }
+        .service-desc {
+            font-size: 11px;
+            color: var(--text-light);
+        }
+
+        /* Contact Items (List) */
+        .contact-list {
+            list-style: none;
+        }
+        .contact-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            padding: 10px;
+            background: var(--bg-color);
+            border-radius: 12px;
+        }
+        .contact-icon {
+            width: 40px;
+            height: 40px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-color);
+            margin-right: 15px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        [data-theme="dark"] .contact-icon {
+            background: #333;
+        }
+        .contact-info p {
+            font-size: 12px;
+            color: var(--text-light);
+        }
+        .contact-info h4 {
+            font-size: 14px;
+            color: var(--text-main);
+        }
+
+        /* QR Code */
+        .qr-section {
+            text-align: center;
+            padding-bottom: 40px;
+        }
+        .qr-box {
+            background: white;
+            padding: 15px;
+            border-radius: 15px;
+            display: inline-block;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 15px;
+        }
+        .qr-img {
+            width: 150px;
+            height: 150px;
+            /* Default background, will be replaced by JS */
+            background-color: #eee; 
+            background-size: cover;
+            background-repeat: no-repeat;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 20px;
+            background: var(--secondary-color);
+            color: #fff;
+            font-size: 12px;
+            border-radius: 0 0 30px 30px; /* Only round bottom if not using sticky */
+        }
+
+        /* Share Modal */
+        .share-modal {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 20px 20px 0 0;
+            box-shadow: 0 -5px 20px rgba(0,0,0,0.1);
+            transform: translateY(100%);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 100;
+        }
+        .share-modal.active {
+            transform: translateY(0);
+        }
+        .share-title {
+            color: var(--text-main);
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .close-share {
+            cursor: pointer;
+            font-size: 20px;
+        }
+
+        /* Utility for copying */
+        .copy-feedback {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #333;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 14px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+            z-index: 200;
+        }
+        .copy-feedback.show {
+            opacity: 1;
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Notification Toast -->
+    <div class="copy-feedback" id="feedbackToast">Link Copied!</div>
+
+    <div class="card-container">
+        
+        <!-- Theme Toggle -->
+        <div class="theme-toggle" onclick="toggleTheme()">
+            <i class="fas fa-moon" id="themeIcon"></i>
+        </div>
+
+        <!-- Banner & Profile -->
+        <div class="banner"></div>
+        
+        <div class="profile-section">
+            <div class="profile-img-container">
+                <img src="shivam_1.webp" alt="Profile" class="profile-img">
+                <div class="verified-badge"><i class="fas fa-check"></i></div>
+            </div>
+            <!-- Name Updated -->
+            <h1 class="name">Shivam Soni</h1>
+            <p class="designation">Software Engineer</p>
+            <p class="company">Founder of Novacraft Technology</p>
+
+            <!-- Main Save Button -->
+            <button class="save-contact-btn" onclick="downloadVCard()">
+                <i class="fas fa-user-plus"></i> Save Contact
+            </button>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="quick-actions">
+            <div class="action-item" onclick="window.location.href='tel:+916376612567'">
+                <div class="action-btn" style="background: var(--phone);">
+                    <i class="fas fa-phone-alt"></i>
+                </div>
+                <span class="action-label">Call</span>
+            </div>
+            <div class="action-item" onclick="window.location.href='https://wa.me/916376612567'">
+                <div class="action-btn" style="background: var(--whatsapp);">
+                    <i class="fab fa-whatsapp"></i>
+                </div>
+                <span class="action-label">WhatsApp</span>
+            </div>
+            <div class="action-item" onclick="window.location.href='mailto:arnav100ni@gmail.com'">
+                <div class="action-btn" style="background: var(--email);">
+                    <i class="fas fa-envelope"></i>
+                </div>
+                <span class="action-label">Email</span>
+            </div>
+            <div class="action-item" onclick="window.open('https://maps.app.goo.gl/AZQguzkrNhnwy5wEA', '_blank')">
+                <div class="action-btn" style="background: var(--location);">
+                    <i class="fas fa-map-marker-alt"></i>
+                </div>
+                <span class="action-label">Map</span>
+            </div>
+        </div>
+
+        <!-- Social Media -->
+        <div class="section">
+            <div class="social-grid">
+                <a href="https://www.facebook.com/shivamsoni637" class="social-link" style="color: #3b5998;"><i class="fab fa-facebook-f"></i></a>
+                <a href="https://www.instagram.com/i_am_shivamsoni/" class="social-link" style="color: #C13584;"><i class="fab fa-instagram"></i></a>
+                <a href="https://www.youtube.com/@novacrafttechnology" class="social-link" style="color: #FF0000;"><i class="fab fa-youtube"></i></a>
+            </div>
+        </div>
+
+        <!-- About Me -->
+        <div class="section">
+            <h3 class="section-title">About Me</h3>
+            <p class="about-text">
+                 Hi, I'm Shivam Soni. I specialize in developing high-performance websites and custom software solutions tailored to streamline your business operations. With a strong focus on innovation and functionality, I turn complex ideas into seamless digital experiences. Let's build something extraordinary together!
+            </p>
+        </div>
+
+        <!-- Services -->
+        <div class="section">
+            <h3 class="section-title">My Services</h3>
+            <div class="services-grid">
+                <div class="service-card">
+                    <i class="fas fa-code service-icon"></i>
+                    <h4 class="service-title">Web Dev</h4>
+                    <p class="service-desc">Responsive websites</p>
+                </div>
+                <div class="service-card">
+                    <i class="fas fa-paint-brush service-icon"></i>
+                    <h4 class="service-title">Custom Software</h4>
+                    <p class="service-desc">Modern interfaces</p>
+                </div>
+                <div class="service-card">
+                    <i class="fas fa-bullhorn service-icon"></i>
+                    <h4 class="service-title">Marketing</h4>
+                    <p class="service-desc">SEO & Social Media</p>
+                </div>
+                <div class="service-card">
+                    <i class="fas fa-camera service-icon"></i>
+                    <h4 class="service-title">Photography</h4>
+                    <p class="service-desc">Product shoots</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contact Details List -->
+        <div class="section">
+            <h3 class="section-title">Contact Info</h3>
+            <div class="contact-list">
+                <div class="contact-item">
+                    <div class="contact-icon"><i class="fas fa-phone-alt"></i></div>
+                    <div class="contact-info">
+                        <h4>Phone</h4>
+                        <p>+91 63766 12567</p>
+                    </div>
+                </div>
+                <div class="contact-item">
+                    <div class="contact-icon"><i class="fas fa-envelope"></i></div>
+                    <div class="contact-info">
+                        <h4>Email</h4>
+                        <p>arnav100ni@gmail.com</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- QR Code -->
+        <div class="section qr-section">
+            <h3 class="section-title" style="text-align: left;">Scan Me</h3>
+            <br>
+            <div class="qr-box">
+                <div class="qr-img"></div>
+            </div>
+            <p class="about-text">Scan this QR code to save my name and number instantly.</p>
+        </div>
+
+        <!-- Share Button Sticky -->
+        <div style="text-align: center; padding: 20px;">
+            <button onclick="toggleShare()" style="background: #333; color: white; border: none; padding: 10px 20px; border-radius: 20px; cursor: pointer;">
+                <i class="fas fa-share-alt"></i> Share This Card
+            </button>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p>© 2024 Shivam Soni. All rights reserved.</p>
+            <p style="opacity: 0.6; margin-top: 5px;">Designed with ❤️ in India</p>
+        </div>
+
+        <!-- Share Modal Overlay -->
+        <div class="share-modal" id="shareModal">
+            <div class="share-title">
+                <h3>Share via</h3>
+                <span class="close-share" onclick="toggleShare()">&times;</span>
+            </div>
+            <div class="social-grid">
+                <a href="whatsapp://send?text=Check out this business card!" class="social-link" style="color: #25D366;"><i class="fab fa-whatsapp"></i></a>
+                <a href="#" onclick="copyLink()" class="social-link" style="color: #333;"><i class="fas fa-copy"></i></a>
+                <a href="mailto:?subject=Digital Business Card&body=Check this out" class="social-link" style="color: #ea4335;"><i class="fas fa-envelope"></i></a>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Data for the card
+        const cardData = {
+            firstName: "Shivam",
+            lastName: "Soni",
+            mobile: "+916376612567",
+        };
+
+        // Theme Toggler
+        function toggleTheme() {
+            const body = document.body;
+            const icon = document.getElementById('themeIcon');
+            
+            if (body.getAttribute('data-theme') === 'dark') {
+                body.removeAttribute('data-theme');
+                icon.classList.remove('fa-sun');
+                icon.classList.add('fa-moon');
+            } else {
+                body.setAttribute('data-theme', 'dark');
+                icon.classList.remove('fa-moon');
+                icon.classList.add('fa-sun');
+            }
+        }
+
+        // Share Modal Toggle
+        function toggleShare() {
+            const modal = document.getElementById('shareModal');
+            modal.classList.toggle('active');
+            
+            // Native share if supported and modal is opening
+            if (modal.classList.contains('active') && navigator.share) {
+                navigator.share({
+                    title: `${cardData.firstName} ${cardData.lastName} - Business Card`,
+                    text: 'Check out my digital business card!',
+                    url: window.location.href
+                }).then(() => {
+                    console.log('Thanks for sharing!');
+                    modal.classList.remove('active'); // Close if shared successfully
+                })
+                .catch(console.error);
+            }
+        }
+
+        // Copy Link Feature
+        function copyLink() {
+            const dummy = document.createElement('input');
+            document.body.appendChild(dummy);
+            dummy.value = window.location.href;
+            dummy.select();
+            document.execCommand('copy');
+            document.body.removeChild(dummy);
+            
+            const toast = document.getElementById('feedbackToast');
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 2000);
+            toggleShare();
+        }
+
+        // Generate SIMPLIFIED vCard String (Only Name and Number)
+        function getSimpleVCardData() {
+            return [
+                'BEGIN:VCARD',
+                'VERSION:3.0',
+                `N:${cardData.lastName};${cardData.firstName};;;`,
+                `FN:${cardData.firstName} ${cardData.lastName}`,
+                `TEL;TYPE=CELL:${cardData.mobile}`,
+                'END:VCARD'
+            ].join('\n');
+        }
+
+        // Update QR Code on Load
+        function updateQRCode() {
+            // Using the Simple VCard Data (No Email, No Website)
+            const vCard = getSimpleVCardData();
+            // Encode the vCard data for URL
+            const encodedVCard = encodeURIComponent(vCard);
+            // Generate QR Code URL
+            const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodedVCard}`;
+            // Set Background
+            document.querySelector('.qr-img').style.backgroundImage = `url('${qrUrl}')`;
+        }
+
+        // Download vCard (.vcf file)
+        // Note: Button will also download the simple version now based on your request
+        function downloadVCard() {
+            const vCardData = getSimpleVCardData();
+            const blob = new Blob([vCardData], { type: 'text/vcard' });
+            const url = URL.createObjectURL(blob);
+            
+            const newLink = document.createElement('a');
+            newLink.download = `${cardData.firstName}_${cardData.lastName}.vcf`;
+            newLink.textContent = "Download vCard";
+            newLink.href = url;
+            
+            newLink.click();
+        }
+
+        // Initialize
+        window.onload = function() {
+            updateQRCode();
+        }
+    </script>
+</body>
+</html>
